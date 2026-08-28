@@ -1,22 +1,28 @@
-class Cat:
-    def __init__(self, name, age):
-        self.name=name
-        self.age=age
+class book:
+    def __init__(self, style, author):
+        self.style=style
+        self.author=author
 
-    def do_meau(self):
-        print(f"{self.name}: МЯУ!")
+class online_book:
+    def __init__(self, style, author):
+        self.style=style
+        self.author=author
 
-    def grow_up(self):
-        self.age+=1
+class audio_book:
+       def __init__(self, style, author, voice):
+        self.style=style
+        self.author=author
+        self.voice=voice
 
-cat1=Cat("Борис", 3)
-cat2=Cat("Игорь", 1)
+book1=book ("fantastic", "Dostoevskiy")
+book2=book ("fantazy", "Tolkin")
+book3=book ("dramma", "Tolstoi")
 
-print(cat1.name, cat1.age)
-print(cat2.name, cat2.age)
+book4=online_book ("dramma", "Palanik")
+book5=online_book ("detectiv", "Donzova")
+book6=online_book ("triller", "London")
 
-cat1.do_meau()
-cat2.grow_up()
+book7=audio_book ("fantastic", "Dostoevskiy", "Alisa")
+book8=audio_book ("detectiv", "Donzova", "Harlamov")
+book9=audio_book ("dramma", "Tolstoi", "Bondarchuk")
 
-print(cat1.name, cat1.age)
-print(cat2.name, cat2.age)
