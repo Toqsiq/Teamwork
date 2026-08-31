@@ -2,7 +2,7 @@
 
 from abc import ABC, abstractmethod
 
-# ====================== КНИГИ ======================
+#  КНИГИ 
 
 class Book(ABC):
     """Базовый класс для всех книг"""
@@ -11,7 +11,7 @@ class Book(ABC):
         self.title = title
         self.author = author
         self.year = year
-        self.is_available = True
+        self.is_available = True  #доступность книги
 
     @abstractmethod
     def get_info(self) -> str:
@@ -47,7 +47,7 @@ class AudioBook(Book):
 
     def __init__(self, title: str, author: str, year: int, duration_hours: float):
         super().__init__(title, author, year)
-        self.duration_hours = duration_hours
+        self.duration_hours = duration_hours #продолжительность книги
 
     def get_info(self) -> str:
         return f"Аудиокнига: «{self.title}» ({self.duration_hours} ч.)"
@@ -62,7 +62,7 @@ class PhysicalBook(Book):
     def __init__(self, title: str, author: str, year: int, pages: int, shelf: str):
         super().__init__(title, author, year)
         self.pages = pages
-        self.shelf = shelf
+        self.shelf = shelf #на какой полке стоит книга
 
     def get_info(self) -> str:
         return f"Физическая книга: «{self.title}», {self.pages} стр., полка {self.shelf}"
@@ -71,7 +71,7 @@ class PhysicalBook(Book):
         return 21
 
 
-# ====================== КЛИЕНТЫ ======================
+#  КЛИЕНТЫ 
 
 class Client(ABC):
     """Базовый класс клиента"""
@@ -82,7 +82,7 @@ class Client(ABC):
         self.borrowed_books = []
 
     @abstractmethod
-    def can_borrow(self, book: Book) -> bool:
+    def can_borrow(self, book: Book) -> bool: #тип книги для физ.клиента или для онлайн-клиента
         """Может ли клиент взять эту книгу"""
         pass
 
