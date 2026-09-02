@@ -3,9 +3,17 @@
 #  БИБЛИОТЕКА 
 
 from datetime import datetime, timedelta
-from models import Book, OnlineBook, AudioBook, PhysicalBook
+"""
+from Books import Book, OnlineBook, AudioBook, PhysicalBook
 from models import Client, OnlineClient, PhysicalClient
-
+"""
+from Books.Book import Book
+from Books.OnlineBook import OnlineBook
+from Books.AudioBook import AudioBook
+from Books.PhysicalBook import PhysicalBook
+from Clients.Client import Client
+from Clients.PhysicalClient import PhysicalClient
+from Clients.OnlineClient import OnlineClient
 
 class Library:
     def __init__(self, name: str):
@@ -49,7 +57,20 @@ class Library:
             f"  Книга:  {book.get_info()}\n"
             f"  Вернуть до: {return_date.strftime('%d.%m.%Y')}"
         )
+    
+    def return_book(self, client: Client, title: str) -> str:
+        book = None
+        for b in client.borrowed_books:
+            if b.title.lower() == title.lower():
+                book = b
+                break
 
+        if book is None:
+            return f"У клиента {client.name} нет книги «{title}»"
+
+        book.is_available = True
+        client.borrowed_books.remove(book)
+        return f"Книга «{title}» успешно возвращена"
 
 
 
