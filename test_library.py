@@ -44,4 +44,8 @@ def test_book_becomes_unavailable_after_borrow(library, physical_client):
     book = library.find_book("Война и мир")
     assert book.is_available is False
 
-
+def test_return_book(library, physical_client):
+    library.borrow_book(physical_client, "Война и мир")
+    result = library.return_book(physical_client, "Война и мир")
+    assert "успешно возвращена" in result
+    assert library.find_book("Война и мир").is_available is True
