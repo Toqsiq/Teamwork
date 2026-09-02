@@ -1,4 +1,7 @@
-from abc import ABC, abstractmethod
+from .Client import Client
+from Books.OnlineBook import OnlineBook
+from Books.AudioBook import AudioBook
+from Books.Book import Book
 
 class OnlineClient(Client):
     """Онлайн-клиент — может брать только электронные и аудиокниги"""

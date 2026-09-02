@@ -1,9 +1,6 @@
  # все классы книг  (наследование)
 
 from abc import ABC, abstractmethod
-from AudioBook import AudioBook
-from OnlineBook import OnlineBook
-from PhysicalBook import PhysicalBook
 
 #  КНИГИ 
 

@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from .Book import Book
 
 class PhysicalBook(Book):
     """Физическая (бумажная) книга"""
