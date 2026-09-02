@@ -12,6 +12,3 @@ class AudioBook(Book):
 
     def borrow_days(self) -> int:
         return 10
-
-
-    PYPY
