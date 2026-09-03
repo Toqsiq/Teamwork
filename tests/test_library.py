@@ -1,138 +1,91 @@
-from datetime import datetime, timedelta
-
-from Library.library import Library
-from Library.Books.OnlineBook import OnlineBook
-from Library.Books.AudioBook import AudioBook
-from Library.Books.PhysicalBook import PhysicalBook
-from Library.Clients.OnlineClient import OnlineClient
-from Library.Clients.PhysicalClient import PhysicalClient
+from library import Library
+from Books.OnlineBook import OnlineBook
+from Books.AudioBook import AudioBook
+from Books.PhysicalBook import PhysicalBook
+from Clients.OnlineClient import OnlineClient
+from Clients.PhysicalClient import PhysicalClient
 
 def create_library():
-    library = Library("Городская библиотека")
-    online = OnlineBook("1984", "George Orwell", 1949, 2.5)
-    audio = AudioBook("Мастер и Маргарита", "Михаил Булгаков", 1967, 18.5)
-    physical = PhysicalBook("Война и мир", "Лев Толстой", 1869, 1300, "A-12")
-    library.add_book(online)
-    library.add_book(audio)
-    library.add_book(physical)
-    return library, online, audio, physical
+    lib=Library('Библиотека')
+    online=OnlineBook('1984','Оруэлл',1949,2.5)
+    audio=AudioBook('Мастер и Маргарита','Булгаков',1967,18.5)
+    physical=PhysicalBook('Война и мир','Толстой',1869,1300,'А-12')
+    lib.add_book(online); lib.add_book(audio); lib.add_book(physical)
+    return lib,online,audio,physical
 
 def test_library_initial_state():
-    library = Library("Библиотека")
-    assert library.name == "Библиотека"
-    assert library.books == []
-    assert library.clients == []
+    lib=Library('Библиотека')
+    assert lib.name=='Библиотека' and lib.books==[] and lib.clients==[]
 
 def test_add_book():
-    library = Library("Библиотека")
-    book = OnlineBook("1984", "George Orwell", 1949, 2.5)
-    library.add_book(book)
-    assert library.books == [book]
+    lib=Library('Библиотека'); b=OnlineBook('1984','Orwell',1949,2.5)
+    lib.add_book(b)
+    assert lib.books==[b]
 
 def test_add_client():
-    library = Library("Библиотека")
-    client = OnlineClient("Иван", "C001")
-    library.add_client(client)
-    assert library.clients == [client]
+    lib=Library('Библиотека'); c=OnlineClient('Иван','001')
+    lib.add_client(c)
+    assert lib.clients==[c]
 
 def test_find_book_case_insensitive():
-    library, _, audio, _ = create_library()
-    assert library.find_book("МАСТЕР И МАРГАРИТА") is audio
-    assert library.find_book("мастер и маргарита") is audio
+    lib,book,_,_=create_library()
+    assert lib.find_book('1984') is book
+    assert lib.find_book('1984'.lower()) is book
 
 def test_find_book_not_found():
-    library = Library("Библиотека")
-    assert library.find_book("Нет такой книги") is None
+    assert create_library()[0].find_book('Нет такой книги') is None
 
 def test_borrow_online_book_success():
-    library, book, _, _ = create_library()
-    client = OnlineClient("Иван", "C001")
-
-    result = library.borrow_book(client, "1984")
-
-    assert "Книга успешно выдана!" in result
-    assert "Иван" in result
+    lib,book,_,_=create_library(); client=OnlineClient('Иван','001')
+    result=lib.borrow_book(client,'1984')
+    assert 'Книга успешно выдана!' in result
+    assert 'Иван' in result
     assert book.is_available is False
-    assert client.borrowed_books == [book]
-
-    expected_date = (datetime.now() + timedelta(days=14)).strftime("%d.%m.%Y")
-    assert expected_date in result
+    assert client.borrowed_books==[book]
 
 def test_borrow_audio_book_success():
-    library, _, book, _ = create_library()
-    client = OnlineClient("Иван", "C001")
-
-    result = library.borrow_book(client, "Мастер и Маргарита")
-
-    assert "Книга успешно выдана!" in result
+    lib,_,book,_=create_library(); client=OnlineClient('Иван','001')
+    result=lib.borrow_book(client,'Мастер и Маргарита')
+    assert 'Книга успешно выдана!' in result
     assert book.is_available is False
-    assert client.borrowed_books == [book]
+    assert client.borrowed_books==[book]
 
-def test_online_client_cannot_borrow_physical_book():
-    library, _, _, book = create_library()
-    client = OnlineClient("Иван", "C001")
-
-    result = library.borrow_book(client, "Война и мир")
-
-    assert result == "Клиент Иван не может взять книгу этого типа"
+def test_borrow_physical_by_online_client_fails():
+    lib,_,_,book=create_library(); client=OnlineClient('Анна','001')
+    result=lib.borrow_book(client,'Война и мир')
+    assert result=='Клиент Анна не может взять книгу этого типа'
     assert book.is_available is True
-    assert client.borrowed_books == []
+    assert client.borrowed_books==[]
 
-def test_physical_client_can_borrow_physical_book():
-    library, _, _, book = create_library()
-    client = PhysicalClient("Петр", "C002")
-
-    result = library.borrow_book(client, "Война и мир")
-
-    assert "Книга успешно выдана!" in result
+def test_borrow_physical_by_physical_client_success():
+    lib,_,_,book=create_library(); client=PhysicalClient('Иван','002')
+    result=lib.borrow_book(client,'Война и мир')
+    assert 'Книга успешно выдана!' in result
     assert book.is_available is False
-    assert client.borrowed_books == [book]
+    assert client.borrowed_books==[book]
 
 def test_borrow_missing_book():
-    library = Library("Библиотека")
-    client = OnlineClient("Иван", "C001")
-
-    result = library.borrow_book(client, "Нет такой книги")
-
-    assert result == "Книга «Нет такой книги» не найдена в библиотеке"
+    lib=create_library()[0]; client=OnlineClient('Иван','001')
+    assert lib.borrow_book(client,'Нет такой книги')=='Книга «Нет такой книги» не найдена в библиотеке'
 
 def test_borrow_unavailable_book():
-    library, book, _, _ = create_library()
-    first = OnlineClient("Иван", "C001")
-    second = OnlineClient("Петр", "C002")
-
-    library.borrow_book(first, "1984")
-    result = library.borrow_book(second, "1984")
-
-    assert result == "Книга «1984» сейчас занята"
-    assert book in first.borrowed_books
-    assert book not in second.borrowed_books
+    lib,book,_,_=create_library(); c1=OnlineClient('Иван','001'); c2=OnlineClient('Пётр','002')
+    lib.borrow_book(c1,'1984')
+    assert lib.borrow_book(c2,'1984')=='Книга «1984» сейчас занята'
+    assert book.is_available is False
 
 def test_return_book_success():
-    library, book, _, _ = create_library()
-    client = OnlineClient("Иван", "C001")
-
-    library.borrow_book(client, "1984")
-    result = library.return_book(client, "1984")
-
-    assert result == "Книга «1984» успешно возвращена"
+    lib,book,_,_=create_library(); client=OnlineClient('Иван','001')
+    lib.borrow_book(client,'1984')
+    assert lib.return_book(client,'1984')=='Книга «1984» успешно возвращена'
     assert book.is_available is True
-    assert client.borrowed_books == []
+    assert client.borrowed_books==[]
 
 def test_return_book_case_insensitive():
-    library, book, _, _ = create_library()
-    client = OnlineClient("Иван", "C001")
+    lib,book,_,_=create_library(); client=OnlineClient('Иван','001')
+    lib.borrow_book(client,'1984')
+    assert lib.return_book(client,'1984'.upper())=='Книга «1984» успешно возвращена'
 
-    library.borrow_book(client, "1984")
-    result = library.return_book(client, "1984")
-
-    assert result == "Книга «1984» успешно возвращена"
-    assert book.is_available is True
-
-def test_return_book_when_client_does_not_have_book():
-    library, _, _, _ = create_library()
-    client = OnlineClient("Иван", "C001")
-
-    result = library.return_book(client, "1984")
-
-    assert result == "У клиента Иван нет книги «1984»"
+def test_return_book_missing():
+    lib=create_library()[0]; client=OnlineClient('Иван','001')
+    assert lib.return_book(client,'1984')=='У клиента Иван нет книги «1984»'

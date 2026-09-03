@@ -1,16 +1,22 @@
-from Library.Clients.Client import Client
-from Library.Clients.OnlineClient import OnlineClient
+import pytest
+from Clients.Client import Client
+from Clients.OnlineClient import OnlineClient
+from Books.OnlineBook import OnlineBook
 
 def test_client_is_abstract():
-    assert hasattr(Client, "__abstractmethods__")
-    assert "can_borrow" in Client.__abstractmethods__
+    with pytest.raises(TypeError):
+        Client('Иван','001')
 
-def test_client_common_fields():
-    client = OnlineClient("Иван", "C001")
-    assert client.name == "Иван"
-    assert client.client_id == "C001"
-    assert client.borrowed_books == []
+def test_client_fields():
+    c=OnlineClient('Иван','001')
+    assert c.name=='Иван'
+    assert c.client_id=='001'
+    assert c.borrowed_books==[]
 
 def test_client_str():
-    client = OnlineClient("Иван", "C001")
-    assert str(client) == "Иван (ID: C001)"
+    assert str(OnlineClient('Иван','001'))=='Иван (ID: 001)'
+
+def test_client_borrowed_books_is_independent():
+    c1=OnlineClient('A','1'); c2=OnlineClient('B','2')
+    c1.borrowed_books.append(OnlineBook('x','y',2000,1.0))
+    assert c2.borrowed_books==[]
