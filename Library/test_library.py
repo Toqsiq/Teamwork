@@ -1,6 +1,12 @@
 import pytest
-from models import OnlineBook, AudioBook, PhysicalBook, OnlineClient, PhysicalClient
 from library import Library
+from Books.Book import Book
+from Books.OnlineBook import OnlineBook
+from Books.AudioBook import AudioBook
+from Books.PhysicalBook import PhysicalBook
+from Clients.Client import Client
+from Clients.PhysicalClient import PhysicalClient
+from Clients.OnlineClient import OnlineClient
 
 
 @pytest.fixture
@@ -16,28 +22,23 @@ def library():
 def online_client():
     return OnlineClient("Анна", "ON-1")
 
-
 @pytest.fixture
 def physical_client():
     return PhysicalClient("Иван", "PH-1")
-
 
 def test_online_client_can_borrow_online_book(library, online_client):
     result = library.borrow_book(online_client, "1984")
     assert "успешно выдана" in result
 
-
 def test_online_client_cannot_borrow_physical_book(library, online_client):
     result = library.borrow_book(online_client, "Война и мир")
     assert "не может взять" in result
-
 
 def test_physical_client_can_borrow_any_book(library, physical_client):
     r1 = library.borrow_book(physical_client, "Война и мир")
     r2 = library.borrow_book(physical_client, "1984")
     assert "успешно выдана" in r1
     assert "успешно выдана" in r2
-
 
 def test_book_becomes_unavailable_after_borrow(library, physical_client):
     library.borrow_book(physical_client, "Война и мир")
