@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from .Book import Book
 
 class AudioBook(Book):
     """Аудиокнига"""
