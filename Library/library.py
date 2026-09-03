@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from Books import Book, OnlineBook, AudioBook, PhysicalBook
 from models import Client, OnlineClient, PhysicalClient
 """
-
+"""
 from Books.Book import Book
 from Books.OnlineBook import OnlineBook
 from Books.AudioBook import AudioBook
@@ -15,6 +15,16 @@ from Books.PhysicalBook import PhysicalBook
 from Clients.Client import Client
 from Clients.PhysicalClient import PhysicalClient
 from Clients.OnlineClient import OnlineClient
+"""
+from Library.Books.Book import Book
+from Library.Books.OnlineBook import OnlineBook
+from Library.Books.AudioBook import AudioBook
+from Library.Books.PhysicalBook import PhysicalBook
+from Library.Clients.Client import Client
+from Library.Clients.PhysicalClient import PhysicalClient
+from Library.Clients.OnlineClient import OnlineClient
+
+
 
 
 class Library:

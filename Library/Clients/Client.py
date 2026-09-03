@@ -1,7 +1,7 @@
  # все классы клиентов (наследование)
 
 from abc import ABC, abstractmethod
-from Books.Book import Book
+from Library.Books.Book import Book
 
 #  КЛИЕНТЫ 
 
